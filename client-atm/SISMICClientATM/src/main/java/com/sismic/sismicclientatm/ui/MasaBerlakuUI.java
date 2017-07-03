@@ -7,6 +7,11 @@
 package com.sismic.sismicclientatm.ui;
 
 import com.sismic.sismicclientatm.reader.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.smartcardio.CardException;
+import javax.swing.SwingUtilities;
 /**
  *
  * @author Arina Listyarini DA
@@ -19,7 +24,7 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
     public MasaBerlakuUI() {
         initComponents();
     }
-
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,13 +88,38 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 new MasaBerlakuUI().setVisible(true);
+                
+                try {
+                    Reader.connectToReader();
+                    Reader.readBlock("02", "FFFFFFFFFFFF", 0);
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            
         });
+        /*try {
+            Reader.connectToReader();
+            Boolean kar = Reader.getTerminal().isCardPresent();
+            if(kar){
+                
+            }      
+        } catch (IOException ex) {
+            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CardException ex) {
+            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
-
+    
+    public void tes() {
+      jLabel1.setText("halo");
+   }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

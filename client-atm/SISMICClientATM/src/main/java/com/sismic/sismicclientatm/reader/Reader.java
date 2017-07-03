@@ -38,6 +38,10 @@ public final class Reader {
         }
     }
     
+    public static CardTerminal getTerminal(){
+        return terminal;
+    }
+    
     public static void readBlock(String block, String key, int aOrB){
         //convert hexString to bytes
         byte[] blockBy = Operation.hexStringToBytes(block);
