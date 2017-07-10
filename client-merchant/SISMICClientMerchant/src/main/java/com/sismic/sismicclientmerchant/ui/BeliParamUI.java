@@ -4,21 +4,18 @@
  * and open the template in the editor.
  */
 
-package com.sismic.sismicclientmerchant;
-
-import org.chamerling.heroku.service.HelloService;
-import org.chamerling.heroku.service.HelloServiceImplService;
+package com.sismic.sismicclientmerchant.ui;
 
 /**
  *
  * @author Arina Listyarini DA
  */
-public class TopUpUI extends javax.swing.JFrame {
+public class BeliParamUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form TopUpUI
+     * Creates new form BeliParamUI
      */
-    public TopUpUI() {
+    public BeliParamUI() {
         initComponents();
     }
 
@@ -37,7 +34,7 @@ public class TopUpUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 486, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,25 +61,22 @@ public class TopUpUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TopUpUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BeliParamUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TopUpUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BeliParamUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TopUpUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BeliParamUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TopUpUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BeliParamUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TopUpUI().setVisible(true);
+                new BeliParamUI().setVisible(true);
             }
         });
-        
-        HelloService hello = new HelloServiceImplService().getHelloServiceImplPort();
-        hello.ubahSaldo(1, "apapa", 5000, 100000, "ATM");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

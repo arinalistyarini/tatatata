@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.sismic.sismicclientatm.reader;
+package com.sismic.sismicclientmerchant.reader;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

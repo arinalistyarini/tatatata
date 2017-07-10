@@ -6,25 +6,26 @@
 
 package com.sismic.sismicclientatm.ui;
 
-import com.sismic.sismicclientatm.reader.*;
-import com.sismic.sismicclientatm.sismic.*;
+import com.sismic.sismicclientatm.reader.Reader;
+import com.sismic.sismicclientatm.sismic.SISMICCardOperation;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
-import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Arina Listyarini DA
  */
-public class MasaBerlakuUI extends javax.swing.JFrame {
+public class LihatSaldoUI extends javax.swing.JFrame {
+
     /**
-     * Creates new form MasaBerlakuUI
+     * Creates new form LihatSaldoUI
      */
-    public MasaBerlakuUI() {
+    public LihatSaldoUI() {
         initComponents();
     }
-  
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,9 +46,9 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("<tanggalnya>");
+        jLabel1.setText("<saldo>");
 
-        jLabel2.setText("Kartu anda berlaku sampai:");
+        jLabel2.setText("Saldo anda sekarang:");
 
         jButton1.setText("Kembali ke Menu Utama");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -71,13 +72,13 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addGap(44, 44, 44)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(31, 31, 31)
+                .addGap(30, 30, 30)
                 .addComponent(jButton1)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         pack();
@@ -88,13 +89,14 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
             Reader.connectToReader();
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
-                jLabel1.setText(SISMICCardOperation.bacaMasaBerlaku());
+                String text = "" + SISMICCardOperation.bacaSaldo();
+                jLabel1.setText(text);
             }      
         } catch (IOException ex) {
-            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         } catch (CardException ex) {
-            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
     }//GEN-LAST:event_formWindowOpened
@@ -123,25 +125,24 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        SwingUtilities.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MasaBerlakuUI().setVisible(true);
+                new LihatSaldoUI().setVisible(true);
             }
-            
         });
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.sismic.sismicclientatm.reader;
+package com.sismic.sismicclientmerchant.reader;
 
 import java.io.IOException;
 import java.util.List;
@@ -293,7 +293,7 @@ public final class Reader {
                     if(incdec == 0){ //increment
                         value_block_operation_apdu_last = Operation.concat2Bytes(inc, dataBy);
                     }
-                    else {
+                    else { //decrement
                         value_block_operation_apdu_last = Operation.concat2Bytes(dec, dataBy);
                     }
                     value_block_operation_apdu = Operation.concat4Bytes(value_block_operation_apdu, blockBy, value_block_operation_apdu_middle, value_block_operation_apdu_last);
