@@ -211,6 +211,17 @@ public class CobaCobaUI extends javax.swing.JFrame {
                     System.out.println("------------------");
                 }*/
                 
+                //fetch listbarang wsmerchant
+                /* com.servermerchant.webservice.ServiceImpl wsMerchant = new com.servermerchant.webservice.ServiceImpl();
+                ArrayList<com.servermerchant.model.Barang> trs = wsMerchant.getListBarang();
+                for(com.servermerchant.model.Barang t: trs){
+                    System.out.println("ID Barang: " + t.getIdBarang());
+                    System.out.println("Nama Barang: " + t.getNamaBarang());
+                    System.out.println("Harga Barang: " + t.getHarga());
+                    System.out.println("----");
+                }*/
+                
+                //feth getbarang wsmerchant
                 
             }      
         } catch (IOException ex) {

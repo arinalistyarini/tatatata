@@ -139,4 +139,51 @@ public class ServiceImpl {
             }
             return null;
     }
+    
+    public ArrayList<Barang> getListBarang(){
+            try {
+                URL url = new URL(rootURL + "barang.json");
+                URLConnection con = url.openConnection();
+                JSONTokener json = new JSONTokener(con.getInputStream());
+                JSONObject obj = new JSONObject(json);
+                Iterator<String> data = obj.keys();
+                ArrayList<Barang> b = new ArrayList<Barang>();
+                                
+                while(data.hasNext()){
+                    String idBar = data.next();
+                    
+                    JSONObject getBar = obj.getJSONObject(idBar);
+
+                    Barang barang = new Barang();
+                    barang.setHarga(getBar.getInt("harga"));
+                    barang.setIdBarang(idBar);
+                    barang.setNamaBarang(getBar.getString("nama_barang"));
+                    b.add(barang);
+                }    
+                
+                return b;
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            return null;
+    }
+    
+    public Barang getBarang(String idBarang){
+            try {
+                URL url = new URL(rootURL + "barang/" + idBarang + ".json");
+                URLConnection con = url.openConnection();
+                JSONTokener json = new JSONTokener(con.getInputStream());
+                JSONObject obj = new JSONObject(json);
+                Barang b = new Barang();
+                
+                b.setHarga(obj.getInt("harga"));
+                b.setIdBarang(idBarang);
+                b.setNamaBarang("nama_barang");
+
+                return b;
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            return null;
+    }
 }
