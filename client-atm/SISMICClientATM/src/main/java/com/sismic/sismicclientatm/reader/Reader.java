@@ -395,4 +395,29 @@ public final class Reader {
         }
         return -1;
     }
+    
+    public static String getCardUID(){
+        try {
+            Card card = terminal.connect("*");
+            channel = card.getBasicChannel();
+
+            //Reset the card
+            card.getATR();
+
+            byte[] uid_apdu = {(byte) 0xFF, (byte) 0xCA, (byte) 0x00, (byte) 0x00, (byte) 0x00};
+            CommandAPDU cmd = new CommandAPDU(uid_apdu);
+            ResponseAPDU transmit = channel.transmit(cmd);
+            
+            String uid_hexstring = Operation.bytesToHexString(transmit.getData());
+            //String uid_ascii = Operation.hexStringToASCII(uid_hexstring);
+            //System.out.println("[INFO] Card UID: " + uid_hexstring + "(ASCII: " + uid_ascii + ")");
+            
+            return uid_hexstring;
+         }
+         catch (CardException ex) {
+            System.out.println("[ERROR] No card found");
+            System.exit(-1);
+        }
+        return null;
+    }
 }
