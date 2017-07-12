@@ -166,6 +166,17 @@ public final class Operation {
         return dec;
     }
     
+    public static String stringASCIIToHexString(String str){
+        char[] chars = str.toCharArray();
+
+        StringBuffer hex = new StringBuffer();
+        for(int i = 0; i < chars.length; i++){
+            hex.append(Integer.toHexString((int)chars[i]));
+        }
+
+        return hex.toString();
+    }
+    
     public static String getBlockACRHexString(int sector, int block){
         int sumBlock = (sector * 4) + block;
         byte[] hexString = decimalIntegerToBytes(sumBlock);

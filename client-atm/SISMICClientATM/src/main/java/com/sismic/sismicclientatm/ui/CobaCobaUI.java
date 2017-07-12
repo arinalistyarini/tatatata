@@ -110,6 +110,8 @@ public class CobaCobaUI extends javax.swing.JFrame {
             Reader.connectToReader();
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
+                // SISMICCardOperation.ubahMasaBerlaku(1594484352); // dalam bentuk epoch bukan milisekon, generate current time java mah epoch dlm bentuk milisekon
+                
                 /*String text = "" + SISMICCardOperation.bacaNomorKartu();
                 jLabel1.setText(text);*/
                 

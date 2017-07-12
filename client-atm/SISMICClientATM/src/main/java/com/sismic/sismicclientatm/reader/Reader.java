@@ -115,6 +115,79 @@ public final class Reader {
         return -1;
     }
     
+    public static String readBlockStr(String block, String key, int aOrB){
+        // ngereturn hexstring, kalo mau jadi ascii: String result_ascii = Operation.hexStringToASCII(result_hexstring);
+        
+        //convert hexString to bytes
+        byte[] blockBy = Operation.hexStringToBytes(block);
+        byte[] keyBy = Operation.hexStringToBytes(key);
+        try {            
+            Card card = terminal.connect("*");
+            channel = card.getBasicChannel();
+
+            //Reset the card
+            card.getATR();
+                        
+            // load auth key
+            int loadKeyResult = apduLoadAuthKey(keyBy);
+            
+            //jika berhasil load key
+            if (loadKeyResult == 0x90) {                
+                // authenticate block
+                // key a or key b. aOrB = 0 key A, aOrB = 1 key B
+                int authBlockResult = 0;
+                if(aOrB == 0){
+                    authBlockResult = apduAuthBlockKeyA(blockBy);
+                }
+                else {
+                    authBlockResult = apduAuthBlockKeyB(blockBy);
+                }
+                                
+                // jika authBlock berhasil
+                if (authBlockResult == 0x90) {
+                    //baca isi blocknya
+                    byte[] read_block_apdu = new byte[] { 
+                        (byte) 0xFF,
+                        (byte) 0xB0,
+                        (byte) 0x00,
+                        // ....(byte) block
+                        // ....(byte) read_block_apdu_last
+                    };
+                    byte[] read_block_apdu_last = new byte[] {
+                        (byte) 0x10, // number byte to read, max 16bytes
+                    };
+                    read_block_apdu = Operation.concat3Bytes(read_block_apdu, blockBy, read_block_apdu_last);
+                    
+                    CommandAPDU cmd = new CommandAPDU(read_block_apdu);
+                    ResponseAPDU transmit = channel.transmit(cmd);
+                
+                    if (transmit.getSW1() == 0x90) {
+                        String result_hexstring = Operation.bytesToHexString(transmit.getData());
+                        String result_ascii = Operation.hexStringToASCII(result_hexstring);
+                        int result_int = Operation.hexStringToDecimalInteger(result_hexstring);
+                        System.out.println("Isi block ke-" + block + ": " + result_hexstring + "(ASCII: " + result_ascii + ")" + " Decimal: " + Operation.hexStringToDecimalInteger(result_hexstring) + " ||| Integer: " + result_int);
+                        
+                        return result_ascii;
+                    }
+                    else{
+                        System.out.println("gagal baca isi block");
+                    }
+                }
+                else{
+                    System.out.println("[ERROR] Failed authenticating block");
+                }
+            }
+            else {
+                System.out.println("[ERROR] Failed loading auth key");
+            }
+         }
+         catch (CardException ex) {
+            System.out.println("[ERROR] No card found");
+            System.exit(-1);
+        }
+        return null;
+    }
+    
     public static int readValueBlock(String block, String key, int aOrB){
         //convert hexString to bytes
         byte[] blockBy = Operation.hexStringToBytes(block);
@@ -184,6 +257,71 @@ public final class Reader {
         byte[] keyBy = Operation.hexStringToBytes(key);
         //byte[] dataBy = Operation.hexStringTo16Bytes(data); // kalo data nya string
         byte[] dataBy = Operation.decimalIntegerTo16Bytes(data); // kalo data nya int
+        
+        //System.out.println(Operation.bytesToHexString(dataBy));
+        try {            
+            Card card = terminal.connect("*");
+            channel = card.getBasicChannel();
+
+            //Reset the card
+            card.getATR();
+            
+            // load auth key
+            int loadKeyResult = apduLoadAuthKey(keyBy);
+            
+            //jika berhasil load key
+            if (loadKeyResult == 0x90) {                
+                // authenticate block
+                // key a or key b. aOrB = 0 key A, aOrB = 1 key B
+                int authBlockResult;
+                if(aOrB == 0){
+                    authBlockResult = apduAuthBlockKeyA(blockBy);
+                }
+                else {
+                    authBlockResult = apduAuthBlockKeyB(blockBy);
+                }
+                
+                // jika authBlock berhasil
+                if (authBlockResult == 0x90) {
+                    //tulis block
+                    byte[] write_block_apdu = new byte[] { 
+                        (byte) 0xFF,(byte) 0xD6, (byte) 0x00,
+                    };
+                    byte[] write_block_apdu_between = new byte[] { 
+                        (byte) 0x10 // number of bytes to update (max 16 bytes)
+                    };
+                    write_block_apdu = Operation.concat4Bytes(write_block_apdu, blockBy, write_block_apdu_between, dataBy);
+                    
+                    CommandAPDU cmd = new CommandAPDU(write_block_apdu);
+                    ResponseAPDU transmit = channel.transmit(cmd);
+                
+                    if (transmit.getSW1() == 0x90) {
+                        System.out.println("[INFO] Block ke-" + block + " berhasil di-update)");
+                    }
+                    else{
+                        System.out.println("gagal tulis block");
+                    }
+                }
+                else{
+                    System.out.println("[ERROR] Failed authenticating block");
+                }
+            }
+            else {
+                System.out.println("[ERROR] Failed loading auth key");
+            }
+         }
+         catch (CardException ex) {
+            System.out.println("[ERROR] No card found");
+            System.exit(-1);
+        }
+    }
+    
+    public static void writeBlockStr(String block, String key, String data, int aOrB){
+        //convert hexString to bytes
+        byte[] blockBy = Operation.hexStringToBytes(block);
+        byte[] keyBy = Operation.hexStringToBytes(key);
+        byte[] dataBy = Operation.hexStringTo16Bytes(data); // kalo data nya string
+        //byte[] dataBy = Operation.decimalIntegerTo16Bytes(data); // kalo data nya int
         
         //System.out.println(Operation.bytesToHexString(dataBy));
         try {            

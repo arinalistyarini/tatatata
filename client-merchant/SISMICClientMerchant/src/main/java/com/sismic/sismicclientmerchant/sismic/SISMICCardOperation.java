@@ -27,13 +27,14 @@ public final class SISMICCardOperation {
         
         // nulis riwayat trans ke kartu:
         
-        //nulis saldo ke DB:
-        
-        // nulis riwayat trans ke DB:
+        //nulis saldo ke DB & riwayat trans ke DB:
+        com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsSismic.ubahSaldo(0, bacaNomorKartu(), data, bacaSaldo(), "Merchant Z");
     }
     
+    // cuekin aja ini mah, gausa dimasukin ke dokumen
     public static void ubahMasaBerlaku(int waktu){
-        
+        //String w = Operation.stringASCIIToHexString(waktu);
         Reader.writeBlock(MASA_BERLAKU_BLOCK_POSITION, MASA_BERLAKU_BLOCK_KEY_A, waktu, 0);
     }
     
@@ -43,13 +44,21 @@ public final class SISMICCardOperation {
         
         // nulis riwayat trans ke kartu:
         
-        //nulis saldo ke DB:
-        
-        // nulis riwayat trans ke DB:
+        //nulis saldo ke DB & riwayat trans ke DB:
+        com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsSismic.ubahSaldo(1, bacaNomorKartu(), data, bacaSaldo(), "Merchant Z");
     }
     
     public static int bacaSaldo(){
         int res = Reader.readValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, 0);
+        
+        //nulis riwayat/logging ke DB
+        String waktu = System.currentTimeMillis() + "";
+        com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsSismic.tambahLog(bacaNomorKartu(), "baca saldo", waktu);
+        
+        System.out.println("done baca saldo");
+        
         return res;
     }
     
@@ -57,6 +66,13 @@ public final class SISMICCardOperation {
         int res = Reader.readBlock(MASA_BERLAKU_BLOCK_POSITION, MASA_BERLAKU_BLOCK_KEY_A, 0);
         String res_st = res + "000";
         Date d = new Date(Long.parseLong(res_st));
+        
+        //nulis riwayat/logging ke DB
+        String waktu = System.currentTimeMillis() + "";
+        com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsSismic.tambahLog(bacaNomorKartu(), "baca masa berlaku", waktu);
+        
+        System.out.println("done baca masa berlaku");
         
         return d.toString();
         
@@ -73,6 +89,9 @@ public final class SISMICCardOperation {
     
     public static String bacaNomorKartu(){
         String res = Reader.getCardUID();
+        
+        System.out.println("nomor kartu: " + res);
+        
         return res;
     }
 }
