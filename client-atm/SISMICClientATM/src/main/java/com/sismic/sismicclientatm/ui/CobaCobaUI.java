@@ -222,7 +222,7 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 }*/
                 
                 //feth getbarang wsmerchant
-                
+                //....nanti aja                
             }      
         } catch (IOException ex) {
             Logger.getLogger(CobaCobaUI.class.getName()).log(Level.SEVERE, null, ex);

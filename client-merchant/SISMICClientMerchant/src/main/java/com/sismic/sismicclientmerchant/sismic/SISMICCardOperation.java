@@ -68,8 +68,11 @@ public final class SISMICCardOperation {
         String wkt_min = d.getMinutes() + "";
                 
         String output = "Masa berlaku habis pada: " + tgl + "-" + bln + "-" + thn;
-        return output;*/
-        
-        
+        return output;*/   
+    }
+    
+    public static String bacaNomorKartu(){
+        String res = Reader.getCardUID();
+        return res;
     }
 }

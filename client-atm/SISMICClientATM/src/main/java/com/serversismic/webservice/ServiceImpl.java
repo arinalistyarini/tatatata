@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 

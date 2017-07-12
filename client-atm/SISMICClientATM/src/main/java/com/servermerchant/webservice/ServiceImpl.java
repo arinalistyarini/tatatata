@@ -168,7 +168,8 @@ public class ServiceImpl {
             return null;
     }
     
-    public Barang getBarang(String idBarang){
+    //diceknanti aja
+    /*public Barang getBarang(String idBarang){
             try {
                 URL url = new URL(rootURL + "barang/" + idBarang + ".json");
                 URLConnection con = url.openConnection();
@@ -185,5 +186,5 @@ public class ServiceImpl {
                 System.out.println(ex);
             }
             return null;
-    }
+    }*/
 }
