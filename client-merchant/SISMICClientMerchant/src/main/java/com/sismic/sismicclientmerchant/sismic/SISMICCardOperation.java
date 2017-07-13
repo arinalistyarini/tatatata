@@ -6,9 +6,13 @@
 
 package com.sismic.sismicclientmerchant.sismic;
 
-import com.sismic.sismicclientmerchant.reader.Reader;
 import com.sismic.sismicclientmerchant.reader.Operation;
+import com.sismic.sismicclientmerchant.reader.Reader;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -30,6 +34,10 @@ public final class SISMICCardOperation {
         //nulis saldo ke DB & riwayat trans ke DB:
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.ubahSaldo(0, bacaNomorKartu(), data, bacaSaldo(), "Merchant Z");
+        
+        /*com.servermerchant.webservice.HelloService wsMerchant = new com.servermerchant.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsMerchant.addTransaksi(SALDO_BLOCK_KEY_A, data);
+        wsMerchant.addTransaksiBarangJumlah(SALDO_BLOCK_KEY_A, SALDO_BLOCK_KEY_A, SALDO_BLOCK_KEY_A);*/
     }
     
     // cuekin aja ini mah, gausa dimasukin ke dokumen
@@ -38,22 +46,34 @@ public final class SISMICCardOperation {
         Reader.writeBlock(MASA_BERLAKU_BLOCK_POSITION, MASA_BERLAKU_BLOCK_KEY_A, waktu, 0);
     }
     
-    public static void beliBarangNoParam(int data){
+    public static void beliBarangNoParam(int data, HashMap<String, Integer> barangJumlah){
         // nulis saldo ke kartu:
         Reader.writeValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, data, 0, 1);
         
         // nulis riwayat trans ke kartu:
         
         //nulis saldo ke DB & riwayat trans ke DB:
+        String idKartu = bacaNomorKartu();
+        
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
-        wsSismic.ubahSaldo(1, bacaNomorKartu(), data, bacaSaldo(), "Merchant Z");
+        String waktu = wsSismic.ubahSaldo(1, idKartu, data, bacaSaldo(), "Merchant Z");
+        
+        //nulis riwayat ke merchant
+        com.servermerchant.webservice.HelloService wsMerchant = new com.servermerchant.webservice.HelloServiceImplService().getHelloServiceImplPort();
+        wsMerchant.addTransaksiParamWaktu(waktu, idKartu, data);
+        Set set = barangJumlah.entrySet();
+        Iterator i = set.iterator();
+        while(i.hasNext()) {
+            Map.Entry me = (Map.Entry)i.next(); // untuk tau mpe index mana
+            wsMerchant.addTransaksiBarangJumlah(waktu, me.getKey().toString(), (String) me.getValue().toString());
+        }
     }
     
     public static int bacaSaldo(){
         int res = Reader.readValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, 0);
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis() + "";
+        String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(bacaNomorKartu(), "baca saldo", waktu);
         
@@ -68,7 +88,7 @@ public final class SISMICCardOperation {
         Date d = new Date(Long.parseLong(res_st));
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis() + "";
+        String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(bacaNomorKartu(), "baca masa berlaku", waktu);
         

@@ -9,6 +9,7 @@ package com.sismic.sismicclientmerchant.ui;
 import com.sismic.sismicclientmerchant.reader.Reader;
 import com.sismic.sismicclientmerchant.sismic.SISMICCardOperation;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
@@ -130,7 +131,10 @@ public class BeliNoParamUI extends javax.swing.JFrame {
         try {
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
-                SISMICCardOperation.beliBarangNoParam(saldo);
+                HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
+                barangJumlah.put("undefined", 0);
+                
+                SISMICCardOperation.beliBarangNoParam(saldo,barangJumlah);
                 String text = "Transaksi berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
                 jLabel2.setText(text);
                 

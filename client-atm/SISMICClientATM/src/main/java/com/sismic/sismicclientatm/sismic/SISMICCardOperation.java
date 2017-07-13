@@ -41,7 +41,7 @@ public final class SISMICCardOperation {
         int res = Reader.readValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, 0);
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis() + "";
+        String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(bacaNomorKartu(), "baca saldo", waktu);
         
@@ -57,7 +57,7 @@ public final class SISMICCardOperation {
         Date d = new Date(Long.parseLong(res_st));
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis() + "";
+        String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(bacaNomorKartu(), "baca masa berlaku", waktu);
         

@@ -26,6 +26,7 @@ public class ObjectFactory {
 
     private final static QName _GetListTransaksi_QNAME = new QName("http://webservice.servermerchant.com/", "getListTransaksi");
     private final static QName _AddTransaksiResponse_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksiResponse");
+    private final static QName _AddTransaksiParamWaktuResponse_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksiParamWaktuResponse");
     private final static QName _AddTransaksiBarangJumlahResponse_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksiBarangJumlahResponse");
     private final static QName _GetTransaksiBarangByWaktuResponse_QNAME = new QName("http://webservice.servermerchant.com/", "getTransaksiBarangByWaktuResponse");
     private final static QName _AddTransaksi_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksi");
@@ -34,6 +35,7 @@ public class ObjectFactory {
     private final static QName _GetTransaksiBarangByWaktu_QNAME = new QName("http://webservice.servermerchant.com/", "getTransaksiBarangByWaktu");
     private final static QName _GetListTransaksiResponse_QNAME = new QName("http://webservice.servermerchant.com/", "getListTransaksiResponse");
     private final static QName _AddTransaksiBarangJumlah_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksiBarangJumlah");
+    private final static QName _AddTransaksiParamWaktu_QNAME = new QName("http://webservice.servermerchant.com/", "addTransaksiParamWaktu");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.servermerchant.webservice
@@ -75,6 +77,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AddTransaksiParamWaktuResponse }
+     * 
+     */
+    public AddTransaksiParamWaktuResponse createAddTransaksiParamWaktuResponse() {
+        return new AddTransaksiParamWaktuResponse();
+    }
+
+    /**
      * Create an instance of {@link GetTransaksiBarangByWaktuResponse }
      * 
      */
@@ -112,6 +122,14 @@ public class ObjectFactory {
      */
     public GetListTransaksiResponse createGetListTransaksiResponse() {
         return new GetListTransaksiResponse();
+    }
+
+    /**
+     * Create an instance of {@link AddTransaksiParamWaktu }
+     * 
+     */
+    public AddTransaksiParamWaktu createAddTransaksiParamWaktu() {
+        return new AddTransaksiParamWaktu();
     }
 
     /**
@@ -197,6 +215,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddTransaksiParamWaktuResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.servermerchant.com/", name = "addTransaksiParamWaktuResponse")
+    public JAXBElement<AddTransaksiParamWaktuResponse> createAddTransaksiParamWaktuResponse(AddTransaksiParamWaktuResponse value) {
+        return new JAXBElement<AddTransaksiParamWaktuResponse>(_AddTransaksiParamWaktuResponse_QNAME, AddTransaksiParamWaktuResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AddTransaksiBarangJumlahResponse }{@code >}}
      * 
      */
@@ -266,6 +293,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://webservice.servermerchant.com/", name = "addTransaksiBarangJumlah")
     public JAXBElement<AddTransaksiBarangJumlah> createAddTransaksiBarangJumlah(AddTransaksiBarangJumlah value) {
         return new JAXBElement<AddTransaksiBarangJumlah>(_AddTransaksiBarangJumlah_QNAME, AddTransaksiBarangJumlah.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddTransaksiParamWaktu }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://webservice.servermerchant.com/", name = "addTransaksiParamWaktu")
+    public JAXBElement<AddTransaksiParamWaktu> createAddTransaksiParamWaktu(AddTransaksiParamWaktu value) {
+        return new JAXBElement<AddTransaksiParamWaktu>(_AddTransaksiParamWaktu_QNAME, AddTransaksiParamWaktu.class, null, value);
     }
 
 }

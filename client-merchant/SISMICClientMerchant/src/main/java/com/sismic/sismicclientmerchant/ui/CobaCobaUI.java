@@ -128,9 +128,9 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 wsSismic.ubahSaldo(0, SISMICCardOperation.bacaNomorKartu(), 500, SISMICCardOperation.bacaSaldo(), "Toko AABB");*/
                 
                 // fetch arraylist of transaksi - ws sismic
-                /*org.chamerling.heroku.servicesismic.HelloService wsSismic = new org.chamerling.heroku.servicesismic.HelloServiceImplService().getHelloServiceImplPort();
-                org.chamerling.heroku.servicesismic.ArrayTransaksi trs = wsSismic.getListTransaksi(SISMICCardOperation.bacaNomorKartu());
-                for(org.chamerling.heroku.servicesismic.Transaksi t: trs.getTransaksis()){
+                /*com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                com.serversismic.webservice.ArrayTransaksi trs = wsSismic.getListTransaksi(SISMICCardOperation.bacaNomorKartu());
+                for(com.serversismic.webservice.Transaksi t: trs.getTransaksis()){
                     long epochmili = t.getWaktu().toGregorianCalendar().getTimeInMillis();
                     Date date = new Date(epochmili);
                 
@@ -159,20 +159,19 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 //---------------------------------------------------
                 
                 //add Transaksi ke db paymentgateway
-                /*org.chamerling.heroku.servicepaymentgateway.HelloService wsPayGat = new org.chamerling.heroku.servicepaymentgateway.HelloServiceImplService().getHelloServiceImplPort();
-                wsPayGat.addTransaksi("4437767890128856", 195000, "Bank C", "Bank G");*/
+                /*com.serverpaymentgateway.webservice.HelloService wsPayGat = new com.serverpaymentgateway.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                wsPayGat.addTransaksi("4437767890128856", 75000, "Bank C", "Bank G");*/
                 
                 
                 //fetch arraylist of transaksi - ws paymentgateway
-                /*org.chamerling.heroku.servicepaymentgateway.HelloService wsPayGat = new org.chamerling.heroku.servicepaymentgateway.HelloServiceImplService().getHelloServiceImplPort();
-                org.chamerling.heroku.servicepaymentgateway.ArrayTransaksi trs = wsPayGat.getListTransaksi("1234567890123456");
-                for(org.chamerling.heroku.servicepaymentgateway.Transaksi t: trs.getTransaksis()){
-                    long epochmili = t.getWaktu().toGregorianCalendar().getTimeInMillis();
-                    Date date = new Date(epochmili);
+                /*com.serverpaymentgateway.webservice.HelloService wsPayGat = new com.serverpaymentgateway.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                com.serverpaymentgateway.webservice.ArrayTransaksi trs = wsPayGat.getListTransaksi("4437767890128856");
+                for(com.serverpaymentgateway.webservice.Transaksi t: trs.getTransaksis()){
+                    String epochmili = t.getWaktu().toGregorianCalendar().getTimeInMillis() + "";
+                    Date date = new Date(Long.parseLong(epochmili));
                 
                     String txt = 
                         "Waktu: " + date.toString() + 
-                        //"Waktu: " + t.getWaktu() + 
                         " | Nominal: " + t.getNominal() + 
                         " | Dari Bank: " + t.getDariBank() +
                         " | Ke Bank: " + t.getKeBank();
@@ -181,11 +180,11 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 
                 ////fetch transaksi param waktu epoch milisekon- ws paymentgateway
                 /*GregorianCalendar gc = new GregorianCalendar();
-                gc.setTime(new Date(Long.parseLong("1499757303204")));
+                gc.setTime(new Date(Long.parseLong("1499940604")));
                 XMLGregorianCalendar xmlGc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
                
-                org.chamerling.heroku.servicepaymentgateway.HelloService wsPayGat = new org.chamerling.heroku.servicepaymentgateway.HelloServiceImplService().getHelloServiceImplPort();
-                org.chamerling.heroku.servicepaymentgateway.Transaksi t = wsPayGat.getTransaksi("1234567890123456", xmlGc);
+                com.serverpaymentgateway.webservice.HelloService wsPayGat = new com.serverpaymentgateway.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                com.serverpaymentgateway.webservice.Transaksi t = wsPayGat.getTransaksi("4437767890128856", xmlGc);
                 
                 long epochmili = t.getWaktu().toGregorianCalendar().getTimeInMillis();
                 Date date = new Date(epochmili);
@@ -210,12 +209,12 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 //---------------------------
                 
                 // addTransaksi ws merchant
-                /*org.chamerling.heroku.servicemerchant.HelloService wsMerchant = new org.chamerling.heroku.servicemerchant.HelloServiceImplService().getHelloServiceImplPort();
-                String waktu = wsMerchant.addTransaksi(SISMICCardOperation.bacaNomorKartu(), 583500);
+                /*com.servermerchant.webservice.HelloService wsMerchant = new com.servermerchant.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                String waktu = wsMerchant.addTransaksi(SISMICCardOperation.bacaNomorKartu(), 40000);
                 // add transaksi_jumlahbarang
                 HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
-                barangJumlah.put("A01", 3);
-                barangJumlah.put("A02", 3);
+                barangJumlah.put("A01", 1);
+                barangJumlah.put("A02", 1);
                 Set set = barangJumlah.entrySet();
                 Iterator i = set.iterator();
                 while(i.hasNext()) {
@@ -224,20 +223,20 @@ public class CobaCobaUI extends javax.swing.JFrame {
                 }*/
                 
                 //getlisttransaksi - wsmerchant
-                /*org.chamerling.heroku.servicemerchant.HelloService wsMerchant = new org.chamerling.heroku.servicemerchant.HelloServiceImplService().getHelloServiceImplPort();
-                org.chamerling.heroku.servicemerchant.ArrayTransaksi tt = wsMerchant.getListTransaksi();
-                for(org.chamerling.heroku.servicemerchant.Transaksi t: tt.getTransaksis()){
-                    long lwkt = t.getWaktu().toGregorianCalendar().getTimeInMillis();
-                    String wkt = lwkt + "";
-                    Date date = new Date(lwkt);
+                /*com.servermerchant.webservice.HelloService wsMerchant = new com.servermerchant.webservice.HelloServiceImplService().getHelloServiceImplPort();
+                com.servermerchant.webservice.ArrayTransaksi tt = wsMerchant.getListTransaksi();
+                for(com.servermerchant.webservice.Transaksi t: tt.getTransaksis()){
+                    String lwkt = t.getWaktu().toGregorianCalendar().getTimeInMillis() +"";
+                    Date date = new Date(Long.parseLong(lwkt));
                     
                     System.out.println("Waktu Transaksi: " + date.toString());
                     System.out.println("ID Kartu: " + t.getIdKartu());
                     System.out.println("Nominal belanja: " + t.getNominal());
                     System.out.println("~~~");
                     //ArrayList<com.servermerchant.model.TransaksiBarang> transb = wsMerchant.getTransaksiBarangByWaktu(wkt);
-                    org.chamerling.heroku.servicemerchant.ArrayTransaksiBarang transb = wsMerchant.getTransaksiBarangByWaktu(wkt);
-                    for(org.chamerling.heroku.servicemerchant.TransaksiBarang tb: transb.getTransaksiBarangs()){
+                    String wkt = t.getWaktu().toGregorianCalendar().getTimeInMillis()/1000 + "";
+                    com.servermerchant.webservice.ArrayTransaksiBarang transb = wsMerchant.getTransaksiBarangByWaktu(wkt);
+                    for(com.servermerchant.webservice.TransaksiBarang tb: transb.getTransaksiBarangs()){
                         System.out.println("ID TransaksiBarang: " + tb.getIdTransaksiBarang());
                         System.out.println("ID Barang yang dibeli: "+ tb.getIdBarang());
                         System.out.println("Jumlah yang dibeli: " + tb.getJumlah());

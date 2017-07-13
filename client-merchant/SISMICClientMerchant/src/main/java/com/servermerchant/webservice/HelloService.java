@@ -67,6 +67,26 @@ public interface HelloService {
 
     /**
      * 
+     * @param waktu
+     * @param nominal
+     * @param idKartu
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "addTransaksiParamWaktu", targetNamespace = "http://webservice.servermerchant.com/", className = "com.servermerchant.webservice.AddTransaksiParamWaktu")
+    @ResponseWrapper(localName = "addTransaksiParamWaktuResponse", targetNamespace = "http://webservice.servermerchant.com/", className = "com.servermerchant.webservice.AddTransaksiParamWaktuResponse")
+    public String addTransaksiParamWaktu(
+        @WebParam(name = "waktu", targetNamespace = "")
+        String waktu,
+        @WebParam(name = "idKartu", targetNamespace = "")
+        String idKartu,
+        @WebParam(name = "nominal", targetNamespace = "")
+        int nominal);
+
+    /**
+     * 
      * @return
      *     returns com.servermerchant.webservice.ArrayBarang
      */

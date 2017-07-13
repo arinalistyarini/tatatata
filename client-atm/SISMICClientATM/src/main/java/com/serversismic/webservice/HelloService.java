@@ -31,13 +31,13 @@ public interface HelloService {
      * @param nominal
      * @param idKartu
      * @return
-     *     returns java.lang.Boolean
+     *     returns java.lang.String
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "ubahSaldo", targetNamespace = "http://webservice.serversismic.com/", className = "com.serversismic.webservice.UbahSaldo")
     @ResponseWrapper(localName = "ubahSaldoResponse", targetNamespace = "http://webservice.serversismic.com/", className = "com.serversismic.webservice.UbahSaldoResponse")
-    public Boolean ubahSaldo(
+    public String ubahSaldo(
         @WebParam(name = "pil", targetNamespace = "")
         int pil,
         @WebParam(name = "idKartu", targetNamespace = "")
