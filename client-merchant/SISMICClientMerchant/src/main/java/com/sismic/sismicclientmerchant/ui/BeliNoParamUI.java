@@ -128,12 +128,11 @@ public class BeliNoParamUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int saldo = Integer.parseInt(jTextField1.getText());
+        HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
+        barangJumlah.put("undefined", 0);
         try {
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
-            if(isKartuTempel){
-                HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
-                barangJumlah.put("undefined", 0);
-                
+            if(isKartuTempel){                
                 SISMICCardOperation.beliBarangNoParam(saldo,barangJumlah);
                 String text = "Transaksi berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
                 jLabel2.setText(text);

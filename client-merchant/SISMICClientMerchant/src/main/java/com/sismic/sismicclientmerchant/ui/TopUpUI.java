@@ -9,6 +9,7 @@ package com.sismic.sismicclientmerchant.ui;
 import com.sismic.sismicclientmerchant.reader.*;
 import com.sismic.sismicclientmerchant.sismic.*;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
@@ -127,10 +128,12 @@ public class TopUpUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int saldo = Integer.parseInt(jTextField1.getText());
+        HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
+        barangJumlah.put("TOP_UP", saldo);
         try {
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
-                SISMICCardOperation.isiSaldo(saldo);
+                SISMICCardOperation.isiSaldo(saldo,barangJumlah);
                 String text = "Isi saldo berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
                 jLabel2.setText(text);
                 
