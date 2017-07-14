@@ -46,8 +46,8 @@ public class TestEnkripsi {
         
         // generate sam key master
         SecureRandom randomizer = new SecureRandom();
-        BigInteger random = new BigInteger(48, randomizer);
-        String key = random.toString(16);
+        BigInteger random = new BigInteger(32, randomizer);
+        String key = random.toString(32);
         Files.write(samKeyFile.toPath(), key.getBytes(), StandardOpenOption.CREATE);
         /*SecureRandom random = new SecureRandom();
         byte[] randomBytes = new byte[6];
@@ -68,7 +68,8 @@ public class TestEnkripsi {
         // generate kunci anakan
         int perulangan = 1000;
         String algoritma = "PBKDF2WithHmacSHA1";
-        int panjangKey = 128;
+        //int panjangKey = 48;
+        int panjangKey = 128; // cuma suppor 16, 24, 32bytes
         String idKartu = "70356809";
         PBEKeySpec keyspec = new PBEKeySpec(samKey.toCharArray(), idKartu.getBytes("UTF-8"), perulangan, panjangKey);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(algoritma);
@@ -77,7 +78,7 @@ public class TestEnkripsi {
         // tulis kunci anakan ke child-key.txt
         Files.write(childKeyFile.toPath(), Base64.encodeBase64String(keyChild.getEncoded()).getBytes(), StandardOpenOption.CREATE);
         System.out.println("Kunci anakan (kunci simetrik untuk aes): " + Base64.encodeBase64String(keyChild.getEncoded()));
-        System.out.println("ukuran: " + Base64.encodeBase64String(keyChild.getEncoded()).getBytes().length);
+        System.out.println("ukuran: " + keyChild.getEncoded().length + " bytes");
         
         //cipher
         String algoritmaEnkripsi = "AES/CBC/PKCS5Padding";
