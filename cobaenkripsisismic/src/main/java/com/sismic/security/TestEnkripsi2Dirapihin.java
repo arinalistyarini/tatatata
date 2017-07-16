@@ -8,22 +8,34 @@ package com.sismic.security;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author Arina Listyarini DA
  */
 public class TestEnkripsi2Dirapihin {
+    private static final Pattern HEX_STRING_PATTERN = Pattern.compile("^([0-9A-Fa-f]{2})+$");
+    private static final char[] HEX_CHARS = "0123456789ABCDEF".toCharArray();
+    
     public static void main(String[] args) throws Exception {
         // random numbers u/ salt
         System.out.println("~ Generate random number u/ salt ~");
         SecureRandom randomizer = new SecureRandom();
-        BigInteger random = new BigInteger(64, randomizer);
-        String rSalt = random.toString(128);
-        byte[] rSaltBytes = rSalt.getBytes("UTF-8");
+        BigInteger random = new BigInteger(128, randomizer);
+        String rSaltBef = random.toString(128);
+        byte[] rSaltBefBytes = rSaltBef.getBytes("UTF-8");
         
-        System.out.println("Angka random u/ salt: " + new String(rSaltBytes, "UTF-8"));
-        System.out.println("Ukurannya (bytes): " + rSaltBytes.length);
+        System.out.println("Angka random u/ salt: " + new String(rSaltBefBytes, "UTF-8"));
+        System.out.println("Ukurannya (bytes): " + rSaltBefBytes.length);
+        System.out.println("Apakah hexstring? " + isHexString(rSaltBef));
+        
+        System.out.println("...potong salt agar 20 bytes...");
+        
+        byte[] rSaltBytes = new byte[20];
+        System.arraycopy(rSaltBef.getBytes("UTF-8"), 0, rSaltBytes, 0, 20);
+        System.out.println("string random u/ idKartu stlh dipotong: " + new String(rSaltBytes, "UTF-8"));
+        System.out.println("ukurannya: " + rSaltBytes.length);
         
         System.out.println("------------------------");
         
@@ -64,17 +76,74 @@ public class TestEnkripsi2Dirapihin {
         System.arraycopy(untukIdKar, 0, combinedIdRand, idKartuBytes.length, untukIdKar.length); 
         System.out.println("Hasil konkat idkartu + random buat id: " + new String(combinedIdRand, "UTF-8"));
         System.out.println("Ukurannya: " + combinedIdRand.length);
+        System.out.println("Apakah hexstring? " + isHexString(new String(combinedIdRand, "UTF-8")));
         
         System.out.println("------------------------");
         
         System.out.println("~ XOR random u/ salt + hasil concat ~");
         
-        byte[] resultXOR = new byte[20];
+        byte[] resultXOR = new byte[Math.min(combinedIdRand.length, rSaltBytes.length)];
+        System.out.println("Ukuran resultXOR sebelum XOR: " + resultXOR.length);
         
         int i = 0;
         for (byte b : combinedIdRand){
-            resultXOR[i] = (byte) (b ^ rSaltBytes[i++]);
+            resultXOR[i] = (byte) (0xff & ((int)b ^ (int)rSaltBytes[i++]));
         }
+        System.out.println("Ukuran setelah dixor: " + resultXOR.length);
         System.out.println("hasil xor: " + new String(resultXOR, "UTF-8"));
+        System.out.println("xor sebiji: " + resultXOR[8]);
+        
+        System.out.println("print result XOR array by array: ");
+        for (i = 0; i < resultXOR.length; i++) {
+            System.out.print(resultXOR[i]);
+        }
+        System.out.println("");
+        
+        System.out.println("resultXOR diconver jadi hexstring: " + bytesToHexString(resultXOR));
+        
+        /*byte[] resultXOR = new byte[Math.min(combinedIdRand.length, rSaltBytes.length)];
+
+        for (int i = 0; i < resultXOR.length; i++) {
+          resultXOR[i] = (byte) (((int) combinedIdRand[i]) ^ ((int) rSaltBytes[i]));
+        }
+        
+        System.out.println("hasil xor: " + new String(resultXOR, "UTF-8"));*/
+        
+        /*for (int i = 0; i < combinedIdRand.length; i++) {
+            rSaltBytes[i] ^= combinedIdRand[i];
+        }
+        System.out.println("Hasil XOR: " + new String(rSaltBytes, "UTF-8"));*/
+        
+        System.out.println("------------------------");
+        
+        System.out.println("~ tes dengan int ~");
+        int a = 9;
+        int b = 13;
+        
+        byte c = (byte) ((byte) a ^ (byte) b);
+        int d = (int) c;
+        
+        System.out.println(d);
+        
+        System.out.println("------------------------");
+        
+        System.out.println("~ tes dengan xor salt satuan + id satuan ~");
+        
+        byte result = (byte) (((int) combinedIdRand[8]) ^ ((int) rSaltBytes[8]));
+        System.out.println(result);
+    }
+    
+    public static boolean isHexString(String s) {
+        return (s != null) && HEX_STRING_PATTERN.matcher(s).matches();
+    }
+    
+    public static String bytesToHexString(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            hexChars[i * 2] = HEX_CHARS[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_CHARS[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }
