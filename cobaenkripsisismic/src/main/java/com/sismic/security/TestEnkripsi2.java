@@ -8,6 +8,7 @@ package com.sismic.security;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -88,6 +89,7 @@ public class TestEnkripsi2 {
         byte[] untukIdKar = new byte[12];
         System.arraycopy(untukId.getBytes("UTF-8"), 0, untukIdKar, 0, 12);
         System.out.println("string random u/ idKartu stlh dipotong: " + new String(untukIdKar, "UTF-8"));
+        System.out.println("ukurannya ^: " + untukIdKar.length);
         
         System.out.println("=============");
         
@@ -112,7 +114,25 @@ public class TestEnkripsi2 {
         for (byte b : combinedIdRand){
             array_3[i] = (byte) (b ^ array_1[i++]);
         }
-        
         System.out.println("hasil xor: " + new String(array_3, "UTF-8"));
+        
+        System.out.println("=============");
+       
+        /*System.out.println("coba dikonversi string - int - bytes dulu");
+        // idKartu + untukIdKar
+        
+        String untukIdKarS = new String(untukIdKar, "UTF-8");
+       
+        int untukIdKarI = Integer.parseInt(untukIdKarS);
+        int idKartuI = Integer.parseInt(idKartu);
+        
+        byte[] bytesUntukIdKarI = ByteBuffer.allocate(20).putInt(untukIdKarI).array();
+        byte[] bytesIdKartuI = ByteBuffer.allocate(20).putInt(idKartuI).array();
+        byte[] array_4 = new byte[20];
+        i = 0;
+        for (byte b :  bytesUntukIdKarI){
+            array_4[i] = (byte) (b ^ bytesIdKartuI[i++]);
+        }
+        System.out.println("hasil xor: " + new String(array_4, "UTF-8"));*/
     }
 }
