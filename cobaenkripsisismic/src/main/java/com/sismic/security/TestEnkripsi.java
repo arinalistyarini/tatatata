@@ -48,7 +48,7 @@ public class TestEnkripsi {
         SecureRandom randomizer = new SecureRandom();
         BigInteger random = new BigInteger(32, randomizer);
         String key = random.toString(32);
-        Files.write(samKeyFile.toPath(), key.getBytes(), StandardOpenOption.CREATE);
+        Files.write(samKeyFile.toPath(), key.getBytes("UTF-8"), StandardOpenOption.CREATE);
         /*SecureRandom random = new SecureRandom();
         byte[] randomBytes = new byte[6];
         random.nextBytes(randomBytes);
