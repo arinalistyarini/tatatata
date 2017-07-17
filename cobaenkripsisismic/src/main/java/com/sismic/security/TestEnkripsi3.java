@@ -139,13 +139,12 @@ public class TestEnkripsi3 {
         SecretKey aesKey = new SecretKeySpec(keyChildPBKDF2.getEncoded(), "AES");
         //tulis ke file child-key-aes.txt
         Files.write(childKeyFileAES.toPath(), Base64.encodeBase64String(aesKey.getEncoded()).getBytes(), StandardOpenOption.CREATE);
-        System.out.println("ukuran aes key: " + aesKey.getEncoded().length);
         
         //cipher
         String algoritmaEnkripsi = "AES/CBC/PKCS5Padding";
         Cipher cipher = Cipher.getInstance(algoritmaEnkripsi);
         cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-        
+                
         // generate IV
         byte[] iv = cipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
         // write iv to text file

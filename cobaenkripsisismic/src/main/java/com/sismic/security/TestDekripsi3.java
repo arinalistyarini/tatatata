@@ -41,7 +41,7 @@ public class TestDekripsi3 {
         String fileXOR4Salt = idKartu + "-xor4salt.txt";
         
         // lokasi file
-        File decryptedFile = new File("target"+File.separator+"classes"+File.separator+fileDecrypted);
+        File decryptedFile = new File("resources"+File.separator+"testenkripsi3"+File.separator+fileDecrypted);
         File plain = new File("resources"+File.separator+"testenkripsi3"+File.separator+filePlain);
         File samKeyFile = new File("resources"+File.separator+"testenkripsi3"+File.separator+fileSAMKey);
         File childKeyFilePBKDF2 = new File("resources"+File.separator+"testenkripsi3"+File.separator+fileChildKeyPBKDF2);
