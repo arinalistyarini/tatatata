@@ -9,6 +9,7 @@ package com.sismic.security;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.regex.Pattern;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -99,7 +100,7 @@ public class TestEnkripsi2Dirapihin {
         }
         System.out.println("");
         
-        System.out.println("resultXOR diconver jadi hexstring: " + bytesToHexString(resultXOR));
+        System.out.println("resultXOR diconvert jadi hexstring: " + bytesToHexString(resultXOR));
         
         /*byte[] resultXOR = new byte[Math.min(combinedIdRand.length, rSaltBytes.length)];
 
@@ -131,6 +132,17 @@ public class TestEnkripsi2Dirapihin {
         
         byte result = (byte) (((int) combinedIdRand[8]) ^ ((int) rSaltBytes[8]));
         System.out.println(result);
+        
+        /*System.out.println("------------------------");
+        
+        System.out.println("HexString to bytes vs getbytes");
+        
+        String test = "26102010955675202138";
+        byte[] testGBy = test.getBytes("UTF-8");
+        byte[] testHexToBy = hexStringToBytes(test);
+        
+        System.out.println(new String(testGBy, "UTF-8") + " dan " + new String(testHexToBy, "UTF-8"));
+        System.out.println(bytesToHexString(testGBy) + " dan " + bytesToHexString(testHexToBy));*/
     }
     
     public static boolean isHexString(String s) {
@@ -145,5 +157,12 @@ public class TestEnkripsi2Dirapihin {
             hexChars[i * 2 + 1] = HEX_CHARS[v & 0x0F];
         }
         return new String(hexChars);
+    }
+    
+    public static byte[] hexStringToBytes(String s) {
+        if (s.length() % 2 == 1){
+            s = "0" + s;
+        }
+        return DatatypeConverter.parseHexBinary(s);
     }
 }
