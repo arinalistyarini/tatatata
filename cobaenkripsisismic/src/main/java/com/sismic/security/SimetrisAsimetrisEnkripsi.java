@@ -80,6 +80,9 @@ public class SimetrisAsimetrisEnkripsi {
         String fileXOR = "xor4salt.txt";
         File XORFile = new File("resources"+File.separator+"simetrisasimetris"+File.separator+idKartu+File.separator+fileXOR);
         
+        String fileIv = "iv.txt";
+        File ivFile = new File("resources"+File.separator+"simetrisasimetris"+File.separator+idKartu+File.separator+fileIv);
+        
         // 1. generate sam-key (kunci master)
         SecureRandom randomizerSAM = new SecureRandom();
         BigInteger randomSAM = new BigInteger(128, randomizerSAM);
@@ -179,6 +182,11 @@ public class SimetrisAsimetrisEnkripsi {
         }
         reader.close();
         writer.close();
+        
+        // generate IV
+        byte[] iv = cipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
+        // write iv to text file
+        Files.write(ivFile.toPath(), org.apache.commons.codec.binary.Base64.encodeBase64String(iv).getBytes(), StandardOpenOption.CREATE);
         
         // 4. enkripsi text.txt dg aes key (3) & tulis di text-enc.txt
         // 5. enkripsi aes key (3) & tulis di idKartu/aes-key-enc.txt
