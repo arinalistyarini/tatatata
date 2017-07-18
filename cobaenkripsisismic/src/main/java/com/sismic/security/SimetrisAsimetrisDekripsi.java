@@ -6,6 +6,9 @@
 
 package com.sismic.security;
 
+import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 /**
  *
  * @author Arina Listyarini DA
@@ -19,4 +22,9 @@ public class SimetrisAsimetrisDekripsi {
     // 2. dekripsi pesan menggunakan kunci aes
         // pesan yang didekrip: text-enc.txt
         // referensi: TestDekripsi3.java
+    public static void main(String[] args) throws Exception {
+        Security.addProvider(new BouncyCastleProvider());
+
+        String idKartu = "70356809";
+    }
 }

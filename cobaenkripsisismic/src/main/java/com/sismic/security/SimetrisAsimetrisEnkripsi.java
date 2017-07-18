@@ -17,6 +17,7 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
@@ -26,6 +27,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -50,6 +52,8 @@ public class SimetrisAsimetrisEnkripsi {
         // 5. enkripsi aes key (3) & tulis di idKartu/aes-key-enc.txt
             // public&private key disimpen di idKartu/txt
             // tapi nnti pada prakteknya, sama sekali tidak disimpan
+        Security.addProvider(new BouncyCastleProvider());
+        
         String idKartu = "70356809";
         
         String fileSamKey = "sam-key.txt";
@@ -133,7 +137,6 @@ public class SimetrisAsimetrisEnkripsi {
         
         // 2d. buat salt dengan meng-xor-kan 2a ^ 2c
         byte[] saltXOR = new byte[Math.min(combinedIdRandBytes.length, rSaltBytes.length)];
-        System.out.println("saltxor size: " + saltXOR.length);
         System.out.println(combinedIdRandBytes.length);
         System.out.println(rSaltBytes.length);
         int i = 0;
