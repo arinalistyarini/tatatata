@@ -39,6 +39,9 @@ public class TestEnkripsiECIES {
         String filePrivateKey = "private-key.txt";
         File privateKeyFile = new File("resources"+File.separator+"testenkripsiecies"+File.separator+filePrivateKey);
         
+        String fileTextEnc = "text-enc.txt";
+        File textEncFile = new File("resources"+File.separator+"testenkripsiecies"+File.separator+fileTextEnc);
+        
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES", "BC");
         ECGenParameterSpec ecParamSpec = new ECGenParameterSpec("secp384r1");
         kpg.initialize(ecParamSpec);
@@ -92,10 +95,10 @@ public class TestEnkripsiECIES {
         PrivateKey privKey = kf.generatePrivate(formatted_private);
 
         Cipher cd = Cipher.getInstance("ECIES", "BC");
-        cd.init(Cipher.DECRYPT_MODE, privKey); //How can i adding the **AES128_CBC** ies param ?
+        cd.init(Cipher.DECRYPT_MODE, privKey);
 
-    // Assume that we know the encoded cipher text
+        c.init(Cipher.DECRYPT_MODE, privKey);
         byte[] plaintext = c.doFinal(Base64.decode(hasilEnkripsi));
-        System.out.println("\nPlaintext : " + new String (plaintext, "UTF-8"));
+        System.out.println("\nPlaintext : " + new String(plaintext, "UTF-8"));
     }
 }
