@@ -7,6 +7,8 @@
 package com.sismic.security;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -22,8 +24,10 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.util.encoders.Base64;
@@ -158,7 +162,28 @@ public class SimetrisAsimetrisEnkripsi {
         // 3. generate aes key dari no 2e
         SecretKey aesKey = new SecretKeySpec(keyChildPBKDF2.getEncoded(), "AES");
         
+        //enkripsi text.txt
+        //cipher
+        String algoritmaEnkripsi = "AES/CBC/PKCS5Padding";
+        Cipher cipher = Cipher.getInstance(algoritmaEnkripsi);
+        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+        
+        // tujuan hasil enkripsi
+        CipherOutputStream writer = new CipherOutputStream(new FileOutputStream(textEncFile), cipher);
+
+        // enkripsi isi file
+        FileReader reader = new FileReader(textFile);
+        int data;
+        while((data = reader.read()) != -1){
+            writer.write(data);
+        }
+        reader.close();
+        writer.close();
+        
         // 4. enkripsi text.txt dg aes key (3) & tulis di text-enc.txt
+        // 5. enkripsi aes key (3) & tulis di idKartu/aes-key-enc.txt
+            // public&private key disimpen di idKartu/txt
+            // tapi nnti pada prakteknya, sama sekali tidak disimpan
         // generate pasangan kunci public & private
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES", "BC");
         ECGenParameterSpec ecParamSpec = new ECGenParameterSpec("secp384r1");
@@ -188,10 +213,10 @@ public class SimetrisAsimetrisEnkripsi {
         Cipher c = Cipher.getInstance("ECIES", "BC");
         c.init(Cipher.ENCRYPT_MODE, pubKey); 
 
-        byte[] cipher = c.doFinal(aesKey.getEncoded());
-        String hasilEnkripsi = Base64.toBase64String(cipher);
+        byte[] cipherAsimetris = c.doFinal(aesKey.getEncoded());
+        String hasilEnkripsi = Base64.toBase64String(cipherAsimetris);
         System.out.println("Ciphertext : " + hasilEnkripsi);
         
-        Files.write(AESKeyFile.toPath(), Base64.encode(cipher), StandardOpenOption.CREATE);
+        Files.write(AESKeyFile.toPath(), Base64.encode(cipherAsimetris), StandardOpenOption.CREATE);
     }
 }
