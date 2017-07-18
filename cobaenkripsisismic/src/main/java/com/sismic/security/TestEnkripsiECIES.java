@@ -96,6 +96,6 @@ public class TestEnkripsiECIES {
 
     // Assume that we know the encoded cipher text
         byte[] plaintext = c.doFinal(Base64.decode(hasilEnkripsi));
-        System.out.println("\nPlaintext : "+ new String (plaintext));
+        System.out.println("\nPlaintext : " + new String (plaintext, "UTF-8"));
     }
 }
