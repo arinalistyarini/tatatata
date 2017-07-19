@@ -224,7 +224,7 @@ public class SimetrisAsimetrisEnkripsi {
         byte[] cipherAsimetris = c.doFinal(aesKey.getEncoded());
         String hasilEnkripsi = Base64.toBase64String(cipherAsimetris);
         System.out.println("Ciphertext : " + hasilEnkripsi);
-        
+                
         Files.write(AESKeyFile.toPath(), Base64.encode(cipherAsimetris), StandardOpenOption.CREATE);
     }
 }

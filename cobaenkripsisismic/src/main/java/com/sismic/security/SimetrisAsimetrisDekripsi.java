@@ -85,9 +85,6 @@ public class SimetrisAsimetrisDekripsi {
         KeyFactory kf = KeyFactory.getInstance("EC","BC");
         PrivateKey privKey = kf.generatePrivate(formatted_private);
 
-        Cipher cd = Cipher.getInstance("ECIES", "BC");
-        cd.init(Cipher.DECRYPT_MODE, privKey);
-        
         Cipher c = Cipher.getInstance("ECIES", "BC");
         c.init(Cipher.DECRYPT_MODE, privKey);
         
