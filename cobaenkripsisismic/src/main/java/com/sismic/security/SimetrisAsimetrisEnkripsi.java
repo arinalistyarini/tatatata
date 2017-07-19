@@ -84,7 +84,7 @@ public class SimetrisAsimetrisEnkripsi {
         File ivFile = new File("resources"+File.separator+"simetrisasimetris"+File.separator+idKartu+File.separator+fileIv);
         
         // 1. generate sam-key (kunci master)
-        SecureRandom randomizerSAM = new SecureRandom();
+        /*SecureRandom randomizerSAM = new SecureRandom();
         BigInteger randomSAM = new BigInteger(128, randomizerSAM);
         String samKeyBef = randomSAM.toString(128);
         // potong sam key-nya menjadi 20bytes/128bit
@@ -92,7 +92,7 @@ public class SimetrisAsimetrisEnkripsi {
         System.arraycopy(samKeyBef.getBytes("UTF-8"), 0, samKeyBytes, 0, 20);
         //tulis ke file sam-key.txt
         Files.write(samKeyFile.toPath(), samKeyBytes, StandardOpenOption.CREATE);
-        //String samKey = new String(samKeyBytes, "UTF-8");
+        //String samKey = new String(samKeyBytes, "UTF-8");*/
         // baca file sam-key.txt
         List<String> samKeys = Files.readAllLines(samKeyFile.toPath(), Charset.forName("UTF-8"));
         if(samKeys.isEmpty()){
@@ -102,14 +102,14 @@ public class SimetrisAsimetrisEnkripsi {
         
         // 2a. generate random number (dan dipotong jadi 20bytes/128bit)
             // disimpen di idKartu/xor4salt.txt
-        SecureRandom randomizer = new SecureRandom();
+        /*SecureRandom randomizer = new SecureRandom();
         BigInteger random = new BigInteger(128, randomizer);
         String rSaltBef = random.toString(128);
         // potong saltnya
         byte[] rSaltBytesCut = new byte[20];
         System.arraycopy(rSaltBef.getBytes("UTF-8"), 0, rSaltBytesCut, 0, 20);
         //tulis ke file <id-kartu>-xor4salt.txt
-        Files.write(XORFile.toPath(), rSaltBytesCut, StandardOpenOption.CREATE);
+        Files.write(XORFile.toPath(), rSaltBytesCut, StandardOpenOption.CREATE);*/
         //baca file <id-kartu>-xor4salt.txt
         List<String> rSalts = Files.readAllLines(XORFile.toPath(), Charset.forName("UTF-8"));
         if(rSalts.isEmpty()){
@@ -120,14 +120,14 @@ public class SimetrisAsimetrisEnkripsi {
         
         // 2b. generate random number (dan dipotong jadi 12bytes/96bit)
             // disimpen di idKartu/konkat-w-idkartu.txt
-        SecureRandom randomizerId = new SecureRandom();
+        /*SecureRandom randomizerId = new SecureRandom();
         BigInteger randomId = new BigInteger(48, randomizerId);
         String untukId = randomId.toString(96);
         //potong random number
         byte[] untukIdKarCut = new byte[12];
         System.arraycopy(untukId.getBytes("UTF-8"), 0, untukIdKarCut, 0, 12);
         //tulis ke file <idKartu>-konkat.txt
-        Files.write(konkatFile.toPath(), untukIdKarCut, StandardOpenOption.CREATE);
+        Files.write(konkatFile.toPath(), untukIdKarCut, StandardOpenOption.CREATE);*/
         //baca file <idKartu>-konkat.txt
         List<String> untukIdKars = Files.readAllLines(konkatFile.toPath(), Charset.forName("UTF-8"));
         if(untukIdKars.isEmpty()){
@@ -144,8 +144,6 @@ public class SimetrisAsimetrisEnkripsi {
         
         // 2d. buat salt dengan meng-xor-kan 2a ^ 2c
         byte[] saltXOR = new byte[Math.min(combinedIdRandBytes.length, rSaltBytes.length)];
-        System.out.println(combinedIdRandBytes.length);
-        System.out.println(rSaltBytes.length);
         int i = 0;
         for (byte b : combinedIdRandBytes){
             saltXOR[i] = (byte) (0xff & ((int)b ^ (int)rSaltBytes[i++]));
@@ -159,16 +157,17 @@ public class SimetrisAsimetrisEnkripsi {
         PBEKeySpec keyspec = new PBEKeySpec(samKey.toCharArray(), saltXOR, perulangan, panjangKey);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(algoritma);
         SecretKey keyChildPBKDF2 = keyFactory.generateSecret(keyspec);
-        System.out.println("Kunci anakan (kunci simetrik untuk aes): " + org.apache.commons.codec.binary.Base64.encodeBase64String(keyChildPBKDF2.getEncoded()));
-        System.out.println("ukuran: " + keyChildPBKDF2.getEncoded().length + " bytes");
+        /*System.out.println("Kunci anakan (kunci simetrik untuk aes): " + Base64.toBase64String(keyChildPBKDF2.getEncoded()));
+        System.out.println("ukuran: " + keyChildPBKDF2.getEncoded().length + " bytes");*/
         
         // 3. generate aes key dari no 2e
         SecretKey aesKey = new SecretKeySpec(keyChildPBKDF2.getEncoded(), "AES");
+        /*System.out.println("aesKey: " + Base64.toBase64String(aesKey.getEncoded()));
+        System.out.println("ukuran: " + aesKey.getEncoded().length + " bytes");*/
         
         //enkripsi text.txt
         //cipher
-        String algoritmaEnkripsi = "AES/CBC/PKCS5Padding";
-        Cipher cipher = Cipher.getInstance(algoritmaEnkripsi);
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, aesKey);
         
         // tujuan hasil enkripsi
@@ -186,12 +185,13 @@ public class SimetrisAsimetrisEnkripsi {
         // generate IV
         byte[] iv = cipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
         // write iv to text file
-        Files.write(ivFile.toPath(), org.apache.commons.codec.binary.Base64.encodeBase64String(iv).getBytes(), StandardOpenOption.CREATE);
+        Files.write(ivFile.toPath(), Base64.toBase64String(iv).getBytes(), StandardOpenOption.CREATE);
         
         // 4. enkripsi text.txt dg aes key (3) & tulis di text-enc.txt
         // 5. enkripsi aes key (3) & tulis di idKartu/aes-key-enc.txt
             // public&private key disimpen di idKartu/txt
-            // tapi nnti pada prakteknya, sama sekali tidak disimpan
+            // tapi nnti pada prakteknya, sama sekali tidak disimpan (mungkin?)
+        
         // generate pasangan kunci public & private
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES", "BC");
         ECGenParameterSpec ecParamSpec = new ECGenParameterSpec("secp384r1");
@@ -205,11 +205,11 @@ public class SimetrisAsimetrisEnkripsi {
         //tulis private key ke file private-key.txt
         Files.write(privateKeyFile.toPath(), Base64.toBase64String(privateKey.getEncoded()).getBytes(), StandardOpenOption.CREATE);
         
-        // mulai enkripsi
+        // enkripsi AES Key, ditulis ke aes-key-enc.txt
         // baca public key dari file public-key.txt
         List<String> pubKeys = Files.readAllLines(publicKeyFile.toPath(), Charset.forName("UTF-8"));
         if(pubKeys.isEmpty()){
-            throw new IllegalStateException("File key invalid");
+            throw new IllegalStateException("public-key.txt invalid");
         }
         String pubKeyF = pubKeys.get(0);
         byte[] decodedPublic = Base64.decode(pubKeyF);

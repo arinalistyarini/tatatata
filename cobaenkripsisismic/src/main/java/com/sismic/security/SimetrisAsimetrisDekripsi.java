@@ -79,7 +79,6 @@ public class SimetrisAsimetrisDekripsi {
             throw new IllegalStateException("File key invalid");
         }
         String prKey = prKeys.get(0);
-        //System.out.println("Key : " + prKey);
         byte[] decodedPrivate = Base64.decode(prKey);
         
         PKCS8EncodedKeySpec formatted_private = new PKCS8EncodedKeySpec(decodedPrivate);
@@ -92,7 +91,7 @@ public class SimetrisAsimetrisDekripsi {
         Cipher c = Cipher.getInstance("ECIES", "BC");
         c.init(Cipher.DECRYPT_MODE, privKey);
         
-        // load IV
+        // load IV dari iv.txt
         List<String> ivs = Files.readAllLines(ivFile.toPath(), Charset.forName("UTF-8"));
         if(ivs.isEmpty()){
             throw new IllegalStateException("File IV invalid");
@@ -105,10 +104,9 @@ public class SimetrisAsimetrisDekripsi {
         // pesan yang didekrip: text-enc.txt
         byte[] AESKeyDec = c.doFinal(Base64.decode(AESKeyBytes));
         
-        SecretKeySpec AESKeySpec = new SecretKeySpec(AESKeyDec, "AES");
-        String algoritmaEnkripsi = "AES/CBC/PKCS5Padding";
-        Cipher cipher = Cipher.getInstance(algoritmaEnkripsi);
-        cipher.init(Cipher.DECRYPT_MODE, AESKeySpec, ivSpec);
+        SecretKeySpec aesKey = new SecretKeySpec(AESKeyDec, "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, aesKey, ivSpec);
         
         // output terdekripsi
         FileWriter output = new FileWriter(textDecFile);
@@ -118,7 +116,6 @@ public class SimetrisAsimetrisDekripsi {
         int data;
         while((data = cis.read()) != -1){
             output.write(data);
-            System.out.println(data);
         }
         cis.close();
         output.close();
