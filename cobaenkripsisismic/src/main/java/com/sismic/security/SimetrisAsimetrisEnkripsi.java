@@ -56,7 +56,6 @@ public class SimetrisAsimetrisEnkripsi {
         // 5. enkripsi aes key (3) & tulis di idKartu/aes-key-enc.txt
             // public&private key disimpen di idKartu/txt
             // tapi nnti pada prakteknya, sama sekali tidak disimpan
-        Security.addProvider(new BouncyCastleProvider());
         
         String idKartu = "70356809";
         
@@ -224,7 +223,7 @@ public class SimetrisAsimetrisEnkripsi {
         byte[] cipherAsimetris = c.doFinal(aesKey.getEncoded());
         String hasilEnkripsi = Base64.toBase64String(cipherAsimetris);
         System.out.println("Ciphertext : " + hasilEnkripsi);
-                
+        
         Files.write(AESKeyFile.toPath(), Base64.encode(cipherAsimetris), StandardOpenOption.CREATE);
     }
 }

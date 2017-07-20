@@ -95,12 +95,12 @@ public class SimetrisAsimetrisDekripsi {
         }
         String iv = ivs.get(0);
         System.out.println("IV : "+iv);
-        IvParameterSpec ivSpec = new IvParameterSpec(org.apache.commons.codec.binary.Base64.decodeBase64(iv));
+        IvParameterSpec ivSpec = new IvParameterSpec(Base64.decode(iv));
         
         // 2. dekripsi pesan menggunakan kunci aes
         // pesan yang didekrip: text-enc.txt
         byte[] AESKeyDec = c.doFinal(Base64.decode(AESKeyBytes));
-        
+                
         SecretKeySpec aesKey = new SecretKeySpec(AESKeyDec, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, aesKey, ivSpec);
