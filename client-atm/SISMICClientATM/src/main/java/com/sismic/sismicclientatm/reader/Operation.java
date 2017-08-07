@@ -184,6 +184,22 @@ public final class Operation {
         return result;
     }
     
+    public static byte[] getBlockACRHexBytes(int sector, int block){
+        int sumBlock = (sector * 4) + block;
+        byte[] hexString = decimalIntegerToBytes(sumBlock);
+        /*String result = bytesToHexString(hexString);
+        byte[] blockBy = Operation.hexStringToBytes(result);*/
+        return hexString;
+    }
+    
+    public static int getSectorFromSumBlock(byte[] sumBlock){
+        String sumBlockHexString = Operation.bytesToHexString(sumBlock);
+        int sumBlockInt = Operation.hexStringToDecimalInteger(sumBlockHexString);
+        int sector = sumBlockInt/4;
+        
+        return sector;
+    }
+    
     public static Date longToDate(long d){
         Date date = new Date(TimeUnit.SECONDS.toMillis(d));
         return date;

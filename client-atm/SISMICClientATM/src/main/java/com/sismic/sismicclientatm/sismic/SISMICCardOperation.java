@@ -27,10 +27,10 @@ public final class SISMICCardOperation {
         // nulis riwayat trans ke kartu:
         
         //nulis saldo ke DB & riwayat trans ke DB:
-        String idKartu = bacaNomorKartu();
+        /*String idKartu = bacaNomorKartu();
         
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
-        wsSismic.ubahSaldo(0, idKartu, data, bacaSaldo(), "ATM A");
+        wsSismic.ubahSaldo(0, idKartu, data, bacaSaldo(), "ATM A");*/
     }
     
     // cuekin aja ini mah, gausa dimasukin ke dokumen
@@ -43,13 +43,13 @@ public final class SISMICCardOperation {
         int res = Reader.readValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, 0);
         
         //nulis riwayat/logging ke DB
-        String idKartu = bacaNomorKartu();
+        /*String idKartu = bacaNomorKartu();
         
         String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(idKartu, "baca saldo", waktu);
         
-        System.out.println("done baca saldo");
+        System.out.println("done baca saldo");*/
         
         return res;
     }
@@ -61,13 +61,13 @@ public final class SISMICCardOperation {
         Date d = new Date(Long.parseLong(res_st));
         
         //nulis riwayat/logging ke DB
-        String idKartu = bacaNomorKartu();
+        /*String idKartu = bacaNomorKartu();
         
         String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(idKartu, "baca masa berlaku", waktu);
         
-        System.out.println("done baca masa berlaku");
+        System.out.println("done baca masa berlaku");*/
         
         return d.toString();
     }

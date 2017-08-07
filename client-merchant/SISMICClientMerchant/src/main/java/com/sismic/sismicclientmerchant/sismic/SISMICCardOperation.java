@@ -32,7 +32,7 @@ public final class SISMICCardOperation {
         // nulis riwayat trans ke kartu:
         
         //nulis saldo ke DB & riwayat trans ke DB:
-        String idKartu = bacaNomorKartu();
+       /* String idKartu = bacaNomorKartu();
         
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         String waktu = wsSismic.ubahSaldo(0, idKartu, data, bacaSaldo(), "Merchant Z");
@@ -45,7 +45,7 @@ public final class SISMICCardOperation {
         while(i.hasNext()) {
             Map.Entry me = (Map.Entry)i.next(); // untuk tau mpe index mana
             wsMerchant.addTransaksiBarangJumlah(waktu, me.getKey().toString(), (String) me.getValue().toString());
-        }
+        }*/
     }
     
     // cuekin aja ini mah, gausa dimasukin ke dokumen
@@ -61,7 +61,7 @@ public final class SISMICCardOperation {
         // nulis riwayat trans ke kartu:
         
         //nulis saldo ke DB & riwayat trans ke DB:
-        String idKartu = bacaNomorKartu();
+        /*String idKartu = bacaNomorKartu();
         
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         String waktu = wsSismic.ubahSaldo(1, idKartu, data, bacaSaldo(), "Merchant Z");
@@ -74,18 +74,18 @@ public final class SISMICCardOperation {
         while(i.hasNext()) {
             Map.Entry me = (Map.Entry)i.next(); // untuk tau mpe index mana
             wsMerchant.addTransaksiBarangJumlah(waktu, me.getKey().toString(), (String) me.getValue().toString());
-        }
+        }*/
     }
     
     public static int bacaSaldo(){
         int res = Reader.readValueBlock(SALDO_BLOCK_POSITION, SALDO_BLOCK_KEY_A, 0);
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis()/1000 + "";
+        /*String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(bacaNomorKartu(), "baca saldo", waktu);
         
-        System.out.println("done baca saldo");
+        System.out.println("done baca saldo");*/
         
         return res;
     }
@@ -98,11 +98,11 @@ public final class SISMICCardOperation {
         String idKartu = bacaNomorKartu();
         
         //nulis riwayat/logging ke DB
-        String waktu = System.currentTimeMillis()/1000 + "";
+        /*String waktu = System.currentTimeMillis()/1000 + "";
         com.serversismic.webservice.HelloService wsSismic = new com.serversismic.webservice.HelloServiceImplService().getHelloServiceImplPort();
         wsSismic.tambahLog(idKartu, "baca masa berlaku", waktu);
         
-        System.out.println("done baca masa berlaku");
+        System.out.println("done baca masa berlaku");*/
         
         return d.toString();
         
