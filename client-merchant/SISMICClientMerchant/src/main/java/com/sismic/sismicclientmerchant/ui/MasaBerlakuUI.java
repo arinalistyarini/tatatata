@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-package com.sismic.sismicclientatm.ui;
+package com.sismic.sismicclientmerchant.ui;
 
-import com.sismic.sismicclientatm.reader.Reader;
-import com.sismic.sismicclientatm.sismic.SISMICCardOperation;
+import com.sismic.sismicclientmerchant.reader.Reader;
+import com.sismic.sismicclientmerchant.sismic.SISMICCardOperation;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,12 +17,12 @@ import javax.smartcardio.CardException;
  *
  * @author Arina Listyarini DA
  */
-public class LihatSaldoUI extends javax.swing.JFrame {
+public class MasaBerlakuUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form LihatSaldoUI
+     * Creates new form MasaBerlakuUI
      */
-    public LihatSaldoUI() {
+    public MasaBerlakuUI() {
         initComponents();
     }
 
@@ -48,7 +48,7 @@ public class LihatSaldoUI extends javax.swing.JFrame {
 
         jLabel1.setText(" ");
 
-        jLabel2.setText("Saldo anda sekarang:");
+        jLabel2.setText("Kartu Anda berlaku sampai:");
 
         jButton1.setText("Kembali ke Menu Utama");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -62,44 +62,27 @@ public class LihatSaldoUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(230, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(30, 30, 30)
+                .addGap(60, 60, 60)
                 .addComponent(jButton1)
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        try {
-            Reader.connectToReader();
-            Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
-            if(isKartuTempel){
-                String text = "" + SISMICCardOperation.bacaSaldo();
-                jLabel1.setText(text);
-            }      
-        } catch (IOException ex) {
-            Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
-        } catch (CardException ex) {
-            Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
-        }
-    }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         HomeUI home = new HomeUI();
@@ -107,6 +90,22 @@ public class LihatSaldoUI extends javax.swing.JFrame {
         
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            Reader.connectToReader();
+            Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
+            if(isKartuTempel){
+                jLabel1.setText(SISMICCardOperation.bacaMasaBerlaku());
+            }      
+        } catch (IOException ex) {
+            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        } catch (CardException ex) {
+            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -125,20 +124,20 @@ public class LihatSaldoUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LihatSaldoUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasaBerlakuUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LihatSaldoUI().setVisible(true);
+                new MasaBerlakuUI().setVisible(true);
             }
         });
     }

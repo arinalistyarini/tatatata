@@ -45,7 +45,7 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("<tanggalnya>");
+        jLabel1.setText(" ");
 
         jLabel2.setText("Kartu anda berlaku sampai:");
 
