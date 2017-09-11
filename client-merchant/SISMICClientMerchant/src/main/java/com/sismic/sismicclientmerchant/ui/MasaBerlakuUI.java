@@ -97,11 +97,16 @@ public class MasaBerlakuUI extends javax.swing.JFrame {
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
                 jLabel1.setText(SISMICCardOperation.bacaMasaBerlaku());
+                String waktu = System.currentTimeMillis()/1000 + "";
+                Reader.writeLogEDC(Reader.getCardUID(), waktu, "berhasil", "lihat masa berlaku", "merchant A", -1);
             }      
         } catch (IOException ex) {
             Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         } catch (CardException ex) {
+            Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        } catch (Exception ex) {
             Logger.getLogger(MasaBerlakuUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }

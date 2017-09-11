@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -126,20 +127,36 @@ public class TopUpUI extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int saldo = Integer.parseInt(jTextField1.getText());
         try {
-            Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
-            if(isKartuTempel){
-                SISMICCardOperation.isiSaldo(saldo);
-                String text = "Isi saldo berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
-                jLabel2.setText(text);
-            }      
+            int saldo = Integer.parseInt(jTextField1.getText());
+            if(saldo < 10000){
+                validation("Pengisian saldo minimum 10.000");
+            }
+            else if(saldo + SISMICCardOperation.bacaSaldo() == 1000000){
+                validation("Maksimal saldo kartu adalah 1.000.000");
+            }
+            else{
+                Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
+                if(isKartuTempel){
+                    SISMICCardOperation.isiSaldo(saldo);
+                    String text = "Isi saldo berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
+                    jLabel2.setText(text);
+                }
+            }   
         } catch (CardException ex) {
             Logger.getLogger(TopUpUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
+        catch (NumberFormatException ex) {
+            validation("Hanya menerima masukan angka");
+            System.out.println(ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    private void validation(String s){
+        JOptionPane.showMessageDialog(null, s);
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         HomeUI home = new HomeUI();
         home.setVisible(true);

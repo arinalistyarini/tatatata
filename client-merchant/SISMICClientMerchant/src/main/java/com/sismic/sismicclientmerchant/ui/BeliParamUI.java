@@ -6,6 +6,10 @@
 
 package com.sismic.sismicclientmerchant.ui;
 
+import com.sismic.sismicclientmerchant.sismic.SISMICCardOperation;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Arina Listyarini DA
@@ -28,22 +32,211 @@ public class BeliParamUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jButton1.setText("Submit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Anda belum memulai Ice Skating. Klik \"Submit\" untuk memulai.");
+
+        jLabel2.setText("Tarif bermain: 50.000/jam");
+
+        jLabel3.setText("Anda selesai bermain. Total yang telah dibayar: ");
+
+        jButton2.setText("Kembali ke Menu Utama");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Anda sudah memulai main Ice Skating");
+
+        jLabel5.setText("Saldo Anda: ");
+
+        jLabel6.setText("Total yang harus dibayar: ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5)
+                    .addComponent(jButton2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addGap(41, 41, 41)
+                .addComponent(jButton2)
+                .addGap(36, 36, 36))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        jLabel3.setVisible(false);
+        jLabel4.setVisible(false);
+        jLabel6.setVisible(false);
+        
+        String saldo = jLabel5.getText();
+        int saldoKartu = SISMICCardOperation.bacaSaldo();
+        jLabel5.setText(saldo + saldoKartu);
+        
+        /*//String zz= System.currentTimeMillis()/1000 + "";
+        long oldTime = 1504646443;
+        //long currentTime = System.currentTimeMillis()/1000;
+        long currentTime = 1504650646;
+        System.out.println(oldTime);
+        System.out.println(currentTime);
+        System.out.println(currentTime - oldTime);
+        System.out.println("Menit: " + (currentTime - oldTime)/60 + " | Detik: " + (currentTime - oldTime)%60);
+        System.out.println("Jam: " + (currentTime - oldTime)/3600 + " | Menit: " + ((currentTime - oldTime)/60)%60 + " | Detik: " + (currentTime - oldTime)%60);*/
+        
+        int waktuTersimpan = SISMICCardOperation.bacaParameter();
+        
+        //belum ada data yang tersimpan (belum ngetap)
+        if(waktuTersimpan == 0){
+            System.out.println("berhasil baca");
+        }
+        else{//sudah ada data yang tersimpan (sudah ngetap)
+            int waktuSekarang = (int) System.currentTimeMillis()/1000;
+            int jam = (waktuSekarang - waktuTersimpan)/3600;
+            int menit = ((waktuSekarang - waktuTersimpan)/60)%60;
+            int detik = (waktuSekarang - waktuTersimpan)%60;
+            System.out.println(detik);
+            jLabel1.setText("Total anda bermain: " + jam + "jam " + menit + " menit. Klik \"Submit\" untuk selesai.");
+            
+            int total = 0;
+            if(jam < 1){
+                total = 50000;
+            }
+            else if(menit < 31){
+                total = jam * 50000;
+            }
+            else if(menit >= 31){
+                total = (jam+1) * 50000;
+            }
+            String dibayarLabel = jLabel6.getText();
+            jLabel6.setText(dibayarLabel + total);
+            jLabel6.setVisible(true);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        /*try {
+            int saldo = Integer.parseInt(jTextField1.getText());
+            if(saldo < 10000){
+                validation("tidak boleh 0, minimal 10.000");
+            }
+        } catch (NumberFormatException ex) {
+            validation("Hanya menerima masukan angka");
+            System.out.println("[EXCEPTION]: " + ex);
+        }*/
+        int saldoKartu = SISMICCardOperation.bacaSaldo();
+        int waktuTersimpan = SISMICCardOperation.bacaParameter();        
+        
+        //belum ada data yang tersimpan (belum ngetap)
+        if(waktuTersimpan == 0){
+            int waktuSekarang = (int) System.currentTimeMillis()/1000;
+            SISMICCardOperation.tulisParameter(waktuSekarang);
+            jButton1.setEnabled(false);
+            jLabel4.setVisible(true);
+        }
+        else{//sudah ada data yang tersimpan (sudah ngetap)
+            int waktuSekarang = (int) System.currentTimeMillis()/1000;
+            int jam = (waktuSekarang - waktuTersimpan)/3600;
+            int menit = ((waktuSekarang - waktuTersimpan)/60)%60;
+            //int detik = (waktuSekarang - waktuTersimpan)%60;
+            jLabel1.setText("Total anda bermain: " + jam + "jam " + menit + " menit. Klik \"Submit\" untuk selesai.");
+            int total = 0;
+            if(jam < 1){
+                total = 50000;
+            }
+            else if(menit < 31){
+                total = jam * 50000;
+            }
+            else if(menit >= 31){
+                total = (jam+1) * 50000;
+            }
+            
+            //cek saldo kartu
+            if(saldoKartu < total){
+                validation("Saldo kartu tidak mencukupi. Harap isi dahulu.");
+            }
+            else{
+                jButton1.setEnabled(false);
+                String dibayarLabel = jLabel3.getText();
+                jLabel3.setText(dibayarLabel + total);
+                jLabel3.setVisible(true);
+                SISMICCardOperation.tulisParameter(0);
+                
+                //nguranginsaldo
+                HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
+                barangJumlah.put("undefined", 0);
+                SISMICCardOperation.beliBarangNoParam(total,barangJumlah);
+                
+                jLabel6.setText("");
+                jLabel5.setText("Saldo Anda: " + SISMICCardOperation.bacaSaldo());
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        HomeUI home = new HomeUI();
+        home.setVisible(true);
+        
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void validation(String s){
+        JOptionPane.showMessageDialog(null, s);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -80,5 +273,13 @@ public class BeliParamUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }

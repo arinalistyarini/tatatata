@@ -9,10 +9,12 @@ package com.sismic.sismicclientmerchant.ui;
 import com.sismic.sismicclientmerchant.reader.Reader;
 import com.sismic.sismicclientmerchant.sismic.SISMICCardOperation;
 import java.io.IOException;
+import java.lang.NumberFormatException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -52,7 +54,7 @@ public class BeliNoParamUI extends javax.swing.JFrame {
 
         jLabel1.setText("Masukkan nominal transaksi:");
 
-        jTextField1.setText("0");
+        jTextField1.setText("500");
 
         jButton1.setText("Submit");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -124,28 +126,50 @@ public class BeliNoParamUI extends javax.swing.JFrame {
             Logger.getLogger(BeliNoParamUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
+         catch (Exception ex) {
+            Logger.getLogger(BeliNoParamUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int saldo = Integer.parseInt(jTextField1.getText());
-        HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
-        barangJumlah.put("undefined", 0);
         try {
-            Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
-            if(isKartuTempel){                
-                SISMICCardOperation.beliBarangNoParam(saldo,barangJumlah);
-                String text = "Transaksi berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
-                jLabel2.setText(text);
-                
-                text = "Saldo anda: " + SISMICCardOperation.bacaSaldo();
-                jLabel3.setText(text);
+            int saldo = Integer.parseInt(jTextField1.getText());
+            if(saldo < 500){
+                validation("Minimal transaksi pembelian adalah 500");
+            }
+            else if(saldo > SISMICCardOperation.bacaSaldo()){
+                validation("Saldo Anda tidak mencukupi untuk melakukan transaksi");
+            }
+            else if(saldo > 1000000){
+                validation("Maksimal transaksi pembelian adalah 1.000.000");
+            }
+            else{
+                HashMap<String, Integer> barangJumlah = new HashMap<String, Integer>();
+                barangJumlah.put("undefined", 0);
+                Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
+                if(isKartuTempel){                
+                    SISMICCardOperation.beliBarangNoParam(saldo,barangJumlah);
+                    String waktu = System.currentTimeMillis()/1000 + "";
+                    Reader.writeLogEDC(Reader.getCardUID(), waktu, "berhasil", "beli barang", "merchant A", saldo);
+                    String text = "Transaksi berhasil. Saldo anda sekarang: " + SISMICCardOperation.bacaSaldo();
+                    jLabel2.setText(text);
+
+                    text = "Saldo anda: " + SISMICCardOperation.bacaSaldo();
+                    jLabel3.setText(text);
+                }
             }      
-        } catch (CardException ex) {
+        } catch (Exception ex) {
+            validation("Hanya menerima masukan angka");
             Logger.getLogger(BeliNoParamUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void validation(String s){
+        JOptionPane.showMessageDialog(null, s);
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         HomeUI home = new HomeUI();
         home.setVisible(true);

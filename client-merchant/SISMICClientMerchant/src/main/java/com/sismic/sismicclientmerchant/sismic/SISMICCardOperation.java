@@ -20,10 +20,13 @@ import java.util.Set;
  */
 public final class SISMICCardOperation {
     public static final String SALDO_BLOCK_KEY_A = "FFFFFFFFFFFF";
-    public static final String MASA_BERLAKU_BLOCK_KEY_A = "FFFFFFFFFFFF";
-    
     public static final String SALDO_BLOCK_POSITION = Operation.getBlockACRHexString(0, 2);
+    
+    public static final String MASA_BERLAKU_BLOCK_KEY_A = "FFFFFFFFFFFF";
     public static final String MASA_BERLAKU_BLOCK_POSITION = Operation.getBlockACRHexString(0, 1);
+    
+    public static final String PARAMETER_KEY_A = "FFFFFFFFFFFF";
+    public static final String PARAMETER_POSITION = Operation.getBlockACRHexString(6, 0);
     
     public static void isiSaldo(int data, HashMap<String, Integer> barangJumlah){
         // nulis saldo ke kartu:
@@ -122,6 +125,15 @@ public final class SISMICCardOperation {
         
         System.out.println("nomor kartu: " + res);
         
+        return res;
+    }
+    
+    public static void tulisParameter(int waktu){
+        Reader.writeBlock(PARAMETER_POSITION, PARAMETER_KEY_A, waktu, 0);
+    }
+    
+    public static int bacaParameter(){
+        int res = Reader.readBlock(PARAMETER_POSITION, PARAMETER_KEY_A, 0);
         return res;
     }
 }

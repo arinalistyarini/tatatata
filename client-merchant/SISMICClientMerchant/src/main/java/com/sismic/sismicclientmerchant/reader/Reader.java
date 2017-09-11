@@ -6,8 +6,17 @@
 
 package com.sismic.sismicclientmerchant.reader;
 
+import com.sismic.sismicclientmerchant.security.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
@@ -15,6 +24,7 @@ import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  *
@@ -557,5 +567,154 @@ public final class Reader {
             System.exit(-1);
         }
         return null;
+    }
+    
+    public static void writeLogEDC(String idKartu, String waktu, String status, String whatDo, String via, int nominal) throws IOException, Exception{
+        //tanpa enkripsi
+        //String zz= System.currentTimeMillis()/1000 + "";
+        /*String dataS = "ID Kartu: " + idKartu + "| Waktu: " +  waktu + "| Status: " + status+ "| Yang dilakukan: " + whatDo + "| Via: " + via + "| Nominal: " + nominal + "\n";
+        byte[] data = dataS.getBytes("UTF-8");
+        
+        String fileLog = "log.txt";
+        File logFile = new File("resources"+File.separator+"EDC"+File.separator+fileLog);
+        Files.write(logFile.toPath(), data, StandardOpenOption.APPEND);*/
+        
+        //dengan enkripsi
+        // kunci2 turunan buat bikin kunci AES
+        /*PBKDF2Impl pbkdf2Impl = new PBKDF2Impl();
+        // read SAM Key
+        String fileSamKey = "masterkey.txt";
+        File samKeyFile = new File("resources"+File.separator+"SAM"+File.separator+fileSamKey);
+        pbkdf2Impl.setSAMMasterKey(GeneratorAndIO.readFromFile(samKeyFile).getBytes("UTF-8")); // read SAM key from file
+        
+        //bikin salt
+        String idMerchant = "M-01";
+        byte[] random1 = GeneratorAndIO.generateBytes(16);
+        byte[] xor1 = GeneratorAndIO.concat2NumBytes(idMerchant.getBytes("UTF-8"), random1);
+        byte[] xor2 = GeneratorAndIO.generateBytes(20);
+        
+        byte[] salt = GeneratorAndIO.xor2NumBytes(xor1, xor2);
+        String fileSaltLog = "saltLog.txt";
+        File saltLogFile = new File("resources"+File.separator+"EDC"+File.separator+fileSaltLog);
+        GeneratorAndIO.writeToFile(saltLogFile, salt);
+        
+        // baca salt dari file
+        String fileSaltLog = "saltLog.txt";
+        File saltLogFile = new File("resources"+File.separator+"EDC"+File.separator+fileSaltLog);
+        byte[] salt = GeneratorAndIO.readFromFile(saltLogFile).getBytes("UTF-8");
+        pbkdf2Impl.setSalt(salt);
+        SecretKey childToBeAESKey = pbkdf2Impl.generateChildKey();
+        //nulis key ke file
+        String fileAESKey = "resources/SAM/eK.txt";
+        GeneratorAndIO.writeToFile(new File(fileAESKey), Base64.encode(childToBeAESKey.getEncoded()));*/
+        
+        
+        AESImpl aesImpl = new AESImpl();
+        
+        //baca key dari file
+        String keyEnc = GeneratorAndIO.readFromFile(new File("resources" + File.separator + "SAM" + File.separator + "eK.txt"));
+        SecretKeySpec keySpec = new SecretKeySpec(Base64.decode(keyEnc), "AES");
+        aesImpl.generateToAESKey(keySpec);
+        
+        // Encrypt text.txt with AES
+        //aesImpl.generateToAESKey(childToBeAESKey);
+        String data = readLogEDC() + "ID Kartu: " + idKartu + "| Waktu: " +  waktu + "| Status: " + status+ "| Yang dilakukan: " + whatDo + "| Via: " + via + "| Nominal: " + nominal + "\n";
+        byte[] dataEncrypted = aesImpl.encrypt(data.getBytes("UTF-8"));
+        /*String hasilEnkripsi = Base64.toBase64String(dataEncrypted); // buat disout ke console
+        System.out.println("Text setelah dienkripsi: " + hasilEnkripsi);*/
+        String fileLog = "log.txt";
+        File logFile = new File("resources"+File.separator+"EDC"+File.separator+fileLog);
+        Files.write(logFile.toPath(), Base64.encode(dataEncrypted), StandardOpenOption.CREATE);
+        
+        // iv to txt
+        aesImpl.generateIV();
+        String fileIv = "iv.txt";
+        File ivFile = new File("resources"+File.separator+"EDC"+File.separator+fileIv);
+        String dummy = "";
+        Files.write(ivFile.toPath(), dummy.getBytes("UTF-8"), StandardOpenOption.CREATE); // file nya dikosongin dl
+        Files.write(ivFile.toPath(), Base64.toBase64String(aesImpl.getIv()).getBytes(), StandardOpenOption.CREATE);
+        
+    }
+    
+    public static String readLogEDC() throws Exception {
+        /*String fileLog = "log.txt";
+        File logFile = new File("resources"+File.separator+"EDC"+File.separator+fileLog);
+        List<String> datas = Files.readAllLines(logFile.toPath(), Charset.forName("UTF-8"));
+        if(datas.isEmpty()){
+            throw new IllegalStateException("File invalid");
+        }
+        return datas;*/
+         
+        // kunci2 turunan buat bikin kunci AES
+        /*PBKDF2Impl pbkdf2Impl = new PBKDF2Impl();
+        // read SAM Key
+        String fileSamKey = "masterkey.txt";
+        File samKeyFile = new File("resources"+File.separator+"SAM"+File.separator+fileSamKey);
+        pbkdf2Impl.setSAMMasterKey(GeneratorAndIO.readFromFile(samKeyFile).getBytes("UTF-8")); // read SAM key from file
+                
+        // baca salt dari file
+        String fileSaltLog = "saltLog.txt";
+        File saltLogFile = new File("resources"+File.separator+"EDC"+File.separator+fileSaltLog);
+        byte[] salt = GeneratorAndIO.readFromFile(saltLogFile).getBytes("UTF-8");
+        pbkdf2Impl.setSalt(salt);
+        SecretKey childToBeAESKey = pbkdf2Impl.generateChildKey();
+        // set aeskey
+        SecretKeySpec AESSecKeySpec = new SecretKeySpec(childToBeAESKey.getEncoded(), "AES");
+        
+        String fileLog = "log.txt";
+        File logFile = new File("resources"+File.separator+"EDC"+File.separator+fileLog);
+        List<String> datas = Files.readAllLines(logFile.toPath(), Charset.forName("UTF-8"));
+        if(datas.isEmpty()){
+            throw new IllegalStateException("File invalid");
+        }
+        String data = datas.get(0);
+        
+        String fileIv = "iv.txt";
+        File ivFile = new File("resources"+File.separator+"EDC"+File.separator+fileIv);
+        List<String> ivs = Files.readAllLines(ivFile.toPath(), Charset.forName("UTF-8"));
+        if(datas.isEmpty()){
+            throw new IllegalStateException("File invalid");
+        }
+        String dataIv = ivs.get(0);
+        IvParameterSpec ivSpec = new IvParameterSpec(Base64.decode(dataIv));
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, AESSecKeySpec, ivSpec);
+        
+        byte[] dataDecBytes = cipher.doFinal(data.getBytes("UTF-8"));
+        
+        String fileLogDec = "log-dec.txt";
+        File logDecFile = new File("resources"+File.separator+"EDC"+File.separator+fileLogDec);
+        Files.write(logDecFile.toPath(), dataDecBytes, StandardOpenOption.CREATE);*/
+        
+        // ULANGIII
+        
+        String fileLog = "log.txt";
+        File logFile = new File("resources"+File.separator+"EDC"+File.separator+fileLog);
+        //decrypt
+        List<String> datas = Files.readAllLines(logFile.toPath(), Charset.forName("UTF-8"));
+        if(datas.isEmpty()){
+            throw new IllegalStateException("File invalid");
+        }
+        String logEnc = datas.get(0);
+        
+        AESImpl aesImpl2 = new AESImpl();
+        //baca key dari file
+        String keyEnc2 = GeneratorAndIO.readFromFile(new File("resources" + File.separator + "SAM" + File.separator + "eK.txt"));
+        SecretKeySpec keySpec2 = new SecretKeySpec(Base64.decode(keyEnc2), "AES");
+        aesImpl2.generateToAESKey(keySpec2);
+        // baca iv dari file        
+        String fileIv2 = "iv.txt";
+        File ivFile2 = new File("resources"+File.separator+"EDC"+File.separator+fileIv2);
+        List<String> ivs = Files.readAllLines(ivFile2.toPath(), Charset.forName("UTF-8"));
+        if(datas.isEmpty()){
+            throw new IllegalStateException("File invalid");
+        }
+        String dataIv = ivs.get(0);
+        IvParameterSpec ivSpec = new IvParameterSpec(Base64.decode(dataIv));
+                
+        byte[] dataDecrypted = aesImpl2.decryptIv(Base64.decode(logEnc), ivSpec);
+        //System.out.println(new String(dataDecrypted));
+        
+        return new String(dataDecrypted);
     }
 }

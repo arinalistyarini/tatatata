@@ -97,12 +97,17 @@ public class LihatSaldoUI extends javax.swing.JFrame {
             Boolean isKartuTempel = Reader.getTerminal().isCardPresent();
             if(isKartuTempel){
                 String text = "" + SISMICCardOperation.bacaSaldo();
+                String waktu = System.currentTimeMillis()/1000 + "";
+                Reader.writeLogEDC(Reader.getCardUID(), waktu, "berhasil", "lihat saldo", "merchant A", -1);
                 jLabel1.setText(text);
             }      
         } catch (IOException ex) {
             Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         } catch (CardException ex) {
+            Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+        } catch (Exception ex) {
             Logger.getLogger(LihatSaldoUI.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
